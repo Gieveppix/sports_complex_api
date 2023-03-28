@@ -1,10 +1,10 @@
 import { Knex } from 'knex';
-import { types } from 'pg';
+import pg from 'pg';
 import { config } from '$/src/config/config.js';
+import { require } from '$/src/helpers/require.js';
 
-types.setTypeParser(1082, (date: string) => date);
+pg.types.setTypeParser(1082, (date: string) => date);
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 export const db = require('knex')({
   client: 'pg',
   connection: config.database,

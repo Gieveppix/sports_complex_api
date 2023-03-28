@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     table
       .enu('age_category', ['children', 'youth', 'young_adults', 'adults'])
       .notNullable();
+    table.boolean('is_admin').defaultTo('false');
     table.timestamp('created_at');
   });
 }
