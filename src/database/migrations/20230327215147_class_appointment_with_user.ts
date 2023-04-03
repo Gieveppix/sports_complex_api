@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
       .unsigned()
       .references('id')
       .inTable('class_appointment');
+    table.timestamp('created_at').defaultTo(knex.fn.now());
   });
 }
 

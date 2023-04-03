@@ -19,6 +19,7 @@ export async function up(knex: Knex): Promise<void> {
       '150',
       '180',
     ]);
+    table.timestamp('created_at').defaultTo(knex.fn.now());
   });
 }
 
