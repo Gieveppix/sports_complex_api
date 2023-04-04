@@ -9,6 +9,8 @@ export interface User {
   age_category: ['children', 'youth', 'young_adults', 'adults'];
   is_admin: boolean;
   created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
 }
 
 export const userFields: (keyof User)[] = [
@@ -20,4 +22,6 @@ export const userFields: (keyof User)[] = [
   'age_category',
   'is_admin',
   'created_at',
+  'updated_at',
+  'is_deleted',
 ];

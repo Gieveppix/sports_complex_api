@@ -12,7 +12,7 @@ app.use(httpLogger);
 const PORT = process.env.PORT ?? 3000;
 
 app.use('/health', authenticateUser, healthController);
-app.use('/auth', userRoute);
+app.use('/api', userRoute);
 
 app.listen(PORT, () => {
   logger.info({ PORT: `${PORT}` }, 'App is up');

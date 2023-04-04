@@ -1,26 +1,20 @@
 import { Request, Response } from 'express';
-import { registerUser } from './user.dao.js';
+import { loginUser } from './user.dao.js';
 import { ValidationError, validationResult } from 'express-validator';
 import { User } from '$/src/controller/users/user.type.js';
 
-export async function registerUserController(
+export async function loginUserController(
   request: Request,
   response: Response
 ): Promise<void> {
-  console.log(request.body);
   const errors = validationResult(request);
 
-  const user: Omit<
-    User,
-    'id' | 'is_admin' | 'created_at' | 'updated_at' | 'is_deleted'
-  > = {
+  const user: Pick<User, 'email' | 'password'> = {
     email: request.body.email,
     password: request.body.password,
-    first_name: request.body.first_name,
-    last_name: request.body.last_name,
-    age_category: request.body.age_category,
   };
-  const res = await registerUser(user);
+
+  const res = await loginUser(user);
 
   if (!errors.isEmpty()) {
     response.status(422).send(errors.errors[0].msg as ValidationError);
