@@ -196,11 +196,6 @@ export async function updateUser(id: string, userData: User): Promise<any> {
       };
     }
   } catch (error) {
-    response = {
-      responseCode: 500,
-      message: 'Server error',
-    };
-
     return response;
   }
 }
