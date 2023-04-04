@@ -7,7 +7,6 @@ export async function registerUserController(
   request: Request,
   response: Response
 ): Promise<void> {
-  console.log(request.body);
   const errors = validationResult(request);
 
   const user: Omit<

@@ -165,8 +165,6 @@ export async function updateUser(id: string, userData: User): Promise<any> {
       userData.password = await bcrypt.hash(userData.password, saltRounds);
     }
 
-    console.log('BOOOOM', userData);
-
     const updatedRows = await db('user')
       .select(
         'id',
@@ -184,7 +182,6 @@ export async function updateUser(id: string, userData: User): Promise<any> {
         responseCode: 404,
         message: 'User not found',
       };
-      console.log('RESPP 1', response);
       return response;
     } else {
       response = {
@@ -193,10 +190,6 @@ export async function updateUser(id: string, userData: User): Promise<any> {
       };
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...userDataWithoutPassword } = userData;
-      console.log('RESPP 2', {
-        user: userDataWithoutPassword,
-        response: response,
-      });
       return {
         user: userDataWithoutPassword,
         response: response,
@@ -207,7 +200,6 @@ export async function updateUser(id: string, userData: User): Promise<any> {
       responseCode: 500,
       message: 'Server error',
     };
-    console.log('RESPP 3', response);
 
     return response;
   }
