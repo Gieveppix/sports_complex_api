@@ -9,7 +9,9 @@
     "dev": "npx basetag link | nodemon | pino-pretty",
     "lint": "eslint . --fix",
     "migrate": "ts-node node_modules/.bin/knex --knexfile ./src/database/knexfile.ts migrate:latest",
-    "rollback": "ts-node node_modules/.bin/knex --knexfile ./src/database/knexfile.ts migrate:rollback --all"
+    "rollback": "ts-node node_modules/.bin/knex --knexfile ./src/database/knexfile.ts migrate:rollback --all",
+    "migrateup": "ts-node node_modules/.bin/knex --knexfile ./src/database/knexfile.ts migrate:up",
+    "migratedown": "ts-node node_modules/.bin/knex --knexfile ./src/database/knexfile.ts migrate:down"
   },
   "keywords": [],
   "author": "",

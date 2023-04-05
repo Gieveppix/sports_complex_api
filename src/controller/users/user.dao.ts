@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */ // TODO: fix any
 import { db } from '$/src/database/db.js';
-import { User } from '$/src/controller/users/user.type.js';
+import { UserId, User } from '$/src/controller/users/user.type.js';
+import { ClassId } from '$/src/controller/classes/class.type.js';
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import * as bcrypt from 'bcrypt';
 
@@ -200,5 +201,68 @@ export async function updateUser(id: string, userData: User): Promise<any> {
   }
 }
 
+export async function registerClass(body: {
+  user_id: UserId;
+  class_id: ClassId;
+}): Promise<Response> {
+  try {
+    // Get the user's age category
+    const userAgeCategory = await db('user')
+      .select('age_category')
+      .where('id', body.user_id)
+      .first();
+
+    if (!userAgeCategory) {
+      response = {
+        responseCode: 404,
+        message: 'User not found',
+      };
+      return response;
+    }
+
+    // Check if there is any class appointment with the same age category as the user
+    const matchingAppointment = await db('class_appointment')
+      .select('id')
+      .where('class_id', body.class_id)
+      .andWhere('age_category', userAgeCategory.age_category)
+      .first();
+
+    if (!matchingAppointment) {
+      response = {
+        responseCode: 403,
+        message: "User's age category does not match any class appointments",
+      };
+      return response;
+    }
+
+    // Enroll the user in the class
+    await db.table('user_with_class').insert({
+      user_id: body.user_id,
+      class_id: body.class_id,
+    });
+
+    response = {
+      responseCode: 200,
+      message: 'Successfully enrolled in the class',
+    };
+    return response;
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (error.message.includes('User has already enrolled in 2 classes')) {
+      response = {
+        responseCode: 403,
+        message: 'User has already enrolled in 2 classes',
+      };
+      return response;
+    } else {
+      response = {
+        responseCode: 400,
+        message: 'Unable to enroll in the class',
+      };
+      return response;
+    }
+  }
+}
 // TODO: implemet delete so that only the admin and user(self)
 // export async function deleteUser(id: string): Promise<any> {}
