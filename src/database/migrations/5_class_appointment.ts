@@ -3,22 +3,15 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('class_appointment', (table) => {
     table.increments('id').primary();
-    table.integer('class_id').unsigned().references('id').inTable('class');
-    table.dateTime('starting_at').notNullable();
     table
-      .enu('age_category', ['children', 'youth', 'young_adults', 'adults'])
-      .notNullable();
-    table.enu('duration', [
-      '30',
-      '45',
-      '60',
-      '75',
-      '90',
-      '105',
-      '120',
-      '150',
-      '180',
-    ]);
+      .integer('class_id')
+      .unsigned()
+      .references('id')
+      .inTable('class')
+      .onDelete('CASCADE');
+    table.dateTime('starting_at').notNullable();
+    table.specificType('age_category', 'age_level').notNullable();
+    table.specificType('duration', 'class_duration');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.boolean('is_deleted').defaultTo('false');

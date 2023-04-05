@@ -3,10 +3,17 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('review', (table) => {
     table.increments('id').primary();
-    table.integer('class_id').unsigned().references('id').inTable('class');
+    table
+      .integer('class_id')
+      .unsigned()
+      .references('id')
+      .inTable('class')
+      .onDelete('CASCADE');
     table.string('title').notNullable();
     table.text('body').notNullable();
     table.timestamp('created_at').defaultTo(knex.fn.now());
+
+    table.index('class_id');
   });
 }
 

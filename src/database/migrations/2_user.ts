@@ -7,9 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('password').notNullable();
     table.string('first_name').notNullable();
     table.string('last_name').notNullable();
-    table
-      .enu('age_category', ['children', 'youth', 'young_adults', 'adults'])
-      .notNullable();
+    table.specificType('age_category', 'age_level').notNullable();
     table.boolean('is_admin').defaultTo('false');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
