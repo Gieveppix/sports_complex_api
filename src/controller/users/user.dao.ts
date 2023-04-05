@@ -363,5 +363,78 @@ export async function registerAppointment(body: {
   }
 }
 
+export async function unregisterClass(body: {
+  user_id: UserId;
+  class_id: ClassId;
+}): Promise<Response> {
+  try {
+    const deleted = await db('user_with_class')
+      .where({
+        user_id: body.user_id,
+        class_id: body.class_id,
+      })
+      .del();
+
+    if (deleted === 0) {
+      response = {
+        responseCode: 404,
+        message: 'User is not enrolled in the specified class',
+      };
+      return response;
+    }
+
+    response = {
+      responseCode: 200,
+      message: 'User unenrolled from the class successfully',
+    };
+    return response;
+  } catch (error) {
+    response = {
+      responseCode: 500,
+      message: 'Server error',
+    };
+    return response;
+  }
+}
+
+export async function unregisterAppointment(body: {
+  user_id: UserId;
+  appointment_id: AppointmentId;
+}): Promise<Response> {
+  try {
+    const deleted = await db('class_appointment_with_user')
+      .where({
+        user_id: body.user_id,
+        class_appointment_id: body.appointment_id,
+      })
+      .del();
+
+    if (deleted === 0) {
+      response = {
+        responseCode: 404,
+        message: 'User is not enrolled in the specified class appointment',
+      };
+      return response;
+    }
+
+    // Decrement the enrollment_count
+    await db('class_appointment')
+      .where('id', body.appointment_id)
+      .decrement('enrollment_count', 1);
+
+    response = {
+      responseCode: 200,
+      message: 'User unregistered from the class appointment successfully',
+    };
+    return response;
+  } catch (error) {
+    response = {
+      responseCode: 500,
+      message: 'Server error',
+    };
+    return response;
+  }
+}
+
 // TODO: implemet delete so that only the admin and user(self)
 // export async function deleteUser(id: string): Promise<any> {}

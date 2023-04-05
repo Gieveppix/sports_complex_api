@@ -7,6 +7,8 @@ import { getUserByIdController } from '$/src/controller/users/getById.controller
 import { updateUserController } from '$/src/controller/users/updateUser.controller.js';
 import { registerClassController } from './registerClass.controller.js';
 import { registerAppointmentController } from './registerAppointment.controller.js';
+import { unregisterClassController } from './unregisterClass.controller.js';
+import { unregisterAppointmentController } from './unregisterAppointment.controller.js';
 
 export const userRoute = express.Router({ mergeParams: true });
 
@@ -70,3 +72,9 @@ userRoute.patch(
   ],
   updateUserController
 );
+
+userRoute.delete('/users/classes', unregisterClassController);
+
+userRoute.delete('/users/appointments', unregisterAppointmentController);
+
+// TODO: Add checks where missing
