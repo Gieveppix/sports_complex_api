@@ -253,7 +253,6 @@ export async function registerClass(body: {
     };
     return response;
   } catch (error) {
-    console.error(error);
     response = {
       responseCode: 500,
       message: 'Server error',
@@ -356,7 +355,6 @@ export async function registerAppointment(body: {
     };
     return response;
   } catch (error) {
-    console.error(error);
     response = {
       responseCode: 500,
       message: 'Server error',
