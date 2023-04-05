@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllUsers } from './user.dao.js';
+import { getAllUsers } from '$/src/controller/users/user.dao.js';
 
 export async function getAllUsersController(
   request: Request,

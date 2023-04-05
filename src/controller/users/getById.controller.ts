@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getUserById } from './user.dao.js';
+import { getUserById } from '$/src/controller/users/user.dao.js';
 
 export async function getUserByIdController(
   request: Request,

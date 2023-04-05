@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { getClassById } from '$/src/controller/classes/class.dao.js';
+import { getAppointmentById } from '$/src/controller/appointments/appointment.dao.js';
 
-export async function getClassByIdController(
+export async function getAppointmentByIdController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await getClassById(request.params.id);
+  const res = await getAppointmentById(request.params.id);
 
   response
     .status(res.response.responseCode)

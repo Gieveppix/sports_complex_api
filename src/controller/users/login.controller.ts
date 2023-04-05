@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { loginUser } from './user.dao.js';
+import { loginUser } from '$/src/controller/users/user.dao.js';
 import { ValidationError, validationResult } from 'express-validator';
 import { User } from '$/src/controller/users/user.type.js';
 

@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
-import { ValidationError, validationResult } from 'express-validator';
-import { updateUser } from '$/src/controller/users/user.dao.js';
+import { validationResult, ValidationError } from 'express-validator';
+import { updateAppointment } from '$/src/controller/appointments/appointment.dao.js';
 
-export async function updateUserController(
+export async function updateAppointmentController(
   request: Request,
   response: Response
 ): Promise<void> {
+  const res = await updateAppointment(request.params.id, request.body);
+
   const errors = validationResult(request);
-  const res = await updateUser(request.params.id, request.body);
 
   if (!errors.isEmpty()) {
     response.status(422).send(errors.errors[0].msg as ValidationError);

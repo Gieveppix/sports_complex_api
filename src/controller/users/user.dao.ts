@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */ // TODO: fix any
 import { db } from '$/src/database/db.js';
-import { User } from './user.type.js';
-import { getCurrentTimestamp } from '../../helpers/timestamp.js';
+import { User } from '$/src/controller/users/user.type.js';
+import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import * as bcrypt from 'bcrypt';
 
 type Response = {

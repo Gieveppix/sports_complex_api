@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */ // TODO: fix any
 import { db } from '$/src/database/db.js';
-import { getCurrentTimestamp } from '../../helpers/timestamp.js';
-import { Class } from './class.type.js';
-// import { getCurrentTimestamp } from '../../helpers/timestamp.js';
+import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
+import { Class } from '$/src/controller/classes/class.type.js';
 
 type Response = {
   responseCode: number;
@@ -45,7 +44,6 @@ export async function getClasses(): Promise<any> {
     .table('class')
     .select('*')
     .then((classes) => {
-      console.log(classes);
       response = {
         responseCode: 200,
         message: 'Classes returned successfully',
@@ -63,8 +61,6 @@ export async function getClassById(id: string): Promise<any> {
     .select('*')
     .where({ id })
     .then((data) => {
-      console.log(data);
-
       response = {
         responseCode: 200,
         message: `Class with id:${id}`,

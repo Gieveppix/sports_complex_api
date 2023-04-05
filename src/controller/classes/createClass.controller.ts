@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { validationResult, ValidationError } from 'express-validator';
-import { createClass } from './class.dao.js';
+import { createClass } from '$/src/controller/classes/class.dao.js';
 
 export async function createClassController(
   request: Request,
