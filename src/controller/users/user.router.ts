@@ -6,6 +6,7 @@ import { getAllUsersController } from '$/src/controller/users/getAll.controller.
 import { getUserByIdController } from '$/src/controller/users/getById.controller.js';
 import { updateUserController } from '$/src/controller/users/updateUser.controller.js';
 import { registerClassController } from './registerClass.controller.js';
+import { registerAppointmentController } from './registerAppointment.controller.js';
 
 export const userRoute = express.Router({ mergeParams: true });
 
@@ -44,7 +45,9 @@ userRoute.post(
   loginUserController
 );
 
-userRoute.post('/users/class', registerClassController);
+userRoute.post('/users/classes', registerClassController);
+
+userRoute.post('/users/appointments', registerAppointmentController);
 
 userRoute.get('/users', getAllUsersController);
 

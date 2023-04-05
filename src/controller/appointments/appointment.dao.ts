@@ -15,7 +15,7 @@ let response: Response = {
 export async function createAppointment(
   appointment: Omit<
     Appointment,
-    'id' | 'created_at' | 'updated_at' | 'is_deleted'
+    'id' | 'enrollment_count' | 'created_at' | 'updated_at' | 'is_deleted'
   >
 ): Promise<any> {
   const class_exists = await db // TODO: You will use this a lot, move it out
@@ -56,7 +56,6 @@ export async function createAppointment(
           };
           return response;
         } else {
-          console.log('ERRORR', error);
           return response;
         }
       });
@@ -98,7 +97,10 @@ export async function getAppointmentById(id: string): Promise<any> {
 
 export async function updateAppointment(
   id: string,
-  appointmentData: Omit<Appointment, 'created_at' | 'is_deleted'>
+  appointmentData: Omit<
+    Appointment,
+    'enrollment_count' | 'created_at' | 'is_deleted'
+  >
 ): Promise<any> {
   if (!appointmentData.class_id) {
     const class_exists = await db
@@ -126,7 +128,6 @@ export async function updateAppointment(
           responseCode: 404,
           message: 'Appointment not found',
         };
-        console.log('DRUGIIII', response);
 
         return response;
       } else {

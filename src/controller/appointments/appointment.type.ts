@@ -8,6 +8,8 @@ export interface Appointment {
   starting_at: string;
   age_category: ['children', 'youth', 'young_adults', 'adults'];
   duration?: ['30', '45', '60', '75', '90', '105', '120', '150', '180'];
+  enrollment_count: number;
+  max_enrollment: number;
   created_at: string;
   updated_at: string;
   is_deleted: boolean;

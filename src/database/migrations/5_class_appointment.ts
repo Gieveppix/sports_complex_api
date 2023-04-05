@@ -12,6 +12,8 @@ export async function up(knex: Knex): Promise<void> {
     table.dateTime('starting_at').notNullable();
     table.specificType('age_category', 'age_level').notNullable();
     table.specificType('duration', 'class_duration');
+    table.integer('enrollment_count').unsigned().defaultTo(0);
+    table.integer('max_enrollment').unsigned().defaultTo(10);
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.boolean('is_deleted').defaultTo('false');

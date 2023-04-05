@@ -4,6 +4,7 @@ import { UserId, User } from '$/src/controller/users/user.type.js';
 import { ClassId } from '$/src/controller/classes/class.type.js';
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import * as bcrypt from 'bcrypt';
+import { AppointmentId } from '../appointments/appointment.type.js';
 
 type Response = {
   responseCode: number;
@@ -206,63 +207,163 @@ export async function registerClass(body: {
   class_id: ClassId;
 }): Promise<Response> {
   try {
-    // Get the user's age category
-    const userAgeCategory = await db('user')
-      .select('age_category')
-      .where('id', body.user_id)
+    // Check if the user is already enrolled in the class
+    const isAlreadyEnrolled = await db('user_with_class')
+      .where({
+        user_id: body.user_id,
+        class_id: body.class_id,
+      })
       .first();
 
-    if (!userAgeCategory) {
+    if (isAlreadyEnrolled) {
       response = {
-        responseCode: 404,
-        message: 'User not found',
+        responseCode: 400,
+        message: 'User is already enrolled in this class',
       };
       return response;
     }
 
-    // Check if there is any class appointment with the same age category as the user
-    const matchingAppointment = await db('class_appointment')
-      .select('id')
-      .where('class_id', body.class_id)
-      .andWhere('age_category', userAgeCategory.age_category)
+    // Check the current number of enrolled classes for the user
+    const enrolledClassesCount = await db('user_with_class')
+      .count('* as count')
+      .where('user_id', body.user_id)
       .first();
 
-    if (!matchingAppointment) {
-      response = {
-        responseCode: 403,
-        message: "User's age category does not match any class appointments",
-      };
-      return response;
+    if (enrolledClassesCount) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (enrolledClassesCount.count >= 2) {
+        response = {
+          responseCode: 400,
+          message: 'User can enroll in a maximum of two classes',
+        };
+        return response;
+      }
     }
 
-    // Enroll the user in the class
-    await db.table('user_with_class').insert({
+    // Enroll user in the class
+    await db('user_with_class').insert({
       user_id: body.user_id,
       class_id: body.class_id,
     });
 
     response = {
       responseCode: 200,
-      message: 'Successfully enrolled in the class',
+      message: 'User enrolled in the class successfully',
     };
     return response;
   } catch (error) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (error.message.includes('User has already enrolled in 2 classes')) {
-      response = {
-        responseCode: 403,
-        message: 'User has already enrolled in 2 classes',
-      };
-      return response;
-    } else {
+    console.error(error);
+    response = {
+      responseCode: 500,
+      message: 'Server error',
+    };
+    return response;
+  }
+}
+
+export async function registerAppointment(body: {
+  user_id: UserId;
+  appointment_id: AppointmentId;
+}): Promise<Response> {
+  try {
+    // Check if the user is already enrolled in the class appointment
+    const isAlreadyEnrolledInAppointment = await db(
+      'class_appointment_with_user'
+    )
+      .where({
+        user_id: body.user_id,
+        class_appointment_id: body.appointment_id,
+      })
+      .first();
+
+    if (isAlreadyEnrolledInAppointment) {
       response = {
         responseCode: 400,
-        message: 'Unable to enroll in the class',
+        message: 'User is already enrolled in this class appointment',
       };
       return response;
     }
+    // Check if the user's age_category matches the class_appointment's age_category
+    const [user, appointment] = await Promise.all([
+      db('user').select('age_category').where('id', body.user_id).first(),
+      db('class_appointment')
+        .select(
+          'class_id',
+          'age_category',
+          'enrollment_count',
+          'max_enrollment'
+        )
+        .where('id', body.appointment_id)
+        .first(),
+    ]);
+
+    const isEnrolledInClass = await db('user_with_class')
+      .where({
+        user_id: body.user_id,
+        class_id: appointment.class_id,
+      })
+      .first();
+
+    if (!isEnrolledInClass) {
+      response = {
+        responseCode: 403,
+        message:
+          'User is not enrolled in the class associated with the appointment',
+      };
+      return response;
+    }
+
+    if (!user || !appointment) {
+      response = {
+        responseCode: 404,
+        message: 'User or class appointment not found',
+      };
+      return response;
+    }
+
+    if (user.age_category !== appointment.age_category) {
+      response = {
+        responseCode: 403,
+        message:
+          'User age category does not match class appointment age category',
+      };
+      return response;
+    }
+
+    if (appointment.enrollment_count >= appointment.max_enrollment) {
+      response = {
+        responseCode: 400,
+        message: 'Class appointment is full',
+      };
+      return response;
+    }
+
+    // Register user for the class appointment
+    await db('class_appointment_with_user').insert({
+      user_id: body.user_id,
+      class_appointment_id: body.appointment_id,
+    });
+
+    // Increment the enrollment_count
+    await db('class_appointment')
+      .where('id', body.appointment_id)
+      .increment('enrollment_count', 1);
+
+    response = {
+      responseCode: 200,
+      message: 'User registered for the class appointment successfully',
+    };
+    return response;
+  } catch (error) {
+    console.error(error);
+    response = {
+      responseCode: 500,
+      message: 'Server error',
+    };
+    return response;
   }
 }
+
 // TODO: implemet delete so that only the admin and user(self)
 // export async function deleteUser(id: string): Promise<any> {}

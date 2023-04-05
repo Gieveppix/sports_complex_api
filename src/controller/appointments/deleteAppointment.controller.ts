@@ -7,7 +7,5 @@ export async function deleteAppointmentController(
 ): Promise<void> {
   const res = await deleteAppointment(request.params.id);
 
-  console.log('DASKDKAKDKAS', res);
-
   response.status(res.responseCode).send(res.message);
 }
