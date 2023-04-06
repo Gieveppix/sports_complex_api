@@ -8,6 +8,8 @@ export interface User {
   last_name: string;
   age_category: ['children', 'youth', 'young_adults', 'adults'];
   is_admin: boolean;
+  is_email_verified: boolean;
+  verification_token: string;
   created_at: string;
   updated_at: string;
   is_deleted: boolean;

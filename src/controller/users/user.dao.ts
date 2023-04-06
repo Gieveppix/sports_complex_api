@@ -6,6 +6,8 @@ import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import * as bcrypt from 'bcrypt';
 import { AppointmentId } from '$/src/interface/types/appointment.type.js';
 import { generateToken } from '$/src/middleware/generate-token.js';
+import { v4 as uuidv4 } from 'uuid';
+import { sendVerificationEmail } from '../../middleware/mail.js';
 
 type Response = {
   responseCode: number;
@@ -19,11 +21,21 @@ let response: Response = {
 export async function registerUser(
   user: Omit<
     User,
-    'id' | 'is_admin' | 'created_at' | 'updated_at' | 'is_deleted'
+    | 'id'
+    | 'is_admin'
+    | 'created_at'
+    | 'updated_at'
+    | 'is_deleted'
+    | 'is_email_verified'
+    | 'verification_token'
   >
 ): Promise<Response> {
   const saltRounds = 10;
   const hash = await bcrypt.hash(user.password, saltRounds);
+
+  const verificationToken = uuidv4();
+
+  await sendVerificationEmail(user.email, verificationToken);
 
   return await db
     .table('user')
@@ -33,6 +45,8 @@ export async function registerUser(
       first_name: user.first_name,
       last_name: user.last_name,
       age_category: user.age_category,
+      is_email_verified: false,
+      verification_token: verificationToken,
     })
     .then((data) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -47,14 +61,20 @@ export async function registerUser(
         return response;
       }
     })
-    .catch((error) => {
+    .catch(async (error) => {
       if (error.constraint === 'user_email_unique') {
+        // Update the verification_token so it matches the newly sent token
+        await db.table('user').update({
+          verification_token: verificationToken,
+        });
         response = {
           responseCode: 409,
           message: 'Email already exists',
         };
         return response;
       } else {
+        console.log(error);
+
         response = {
           responseCode: 400,
           message: 'Unable to register',
@@ -64,12 +84,51 @@ export async function registerUser(
     });
 }
 
+export async function verifyEmail(token: string): Promise<Response> {
+  try {
+    const result = await db('user')
+      .update({ is_email_verified: true })
+      .where({ verification_token: token });
+
+    if (result === 0) {
+      return {
+        responseCode: 400,
+        message: 'Invalid verification token',
+      };
+    }
+
+    return {
+      responseCode: 200,
+      message: 'Email successfully verified',
+    };
+  } catch (error) {
+    console.log(error);
+
+    return {
+      responseCode: 400,
+      message: 'Unable to verify email',
+    };
+  }
+}
+
 export async function loginUser(
   user: Pick<User, 'email' | 'password'>
 ): Promise<Response> {
   try {
     const data = await db('user')
-      .select('id', 'email', 'password', 'is_admin')
+      .select(
+        'id',
+        'email',
+        'first_name',
+        'last_name',
+        'age_category',
+        'is_admin',
+        'is_email_verified',
+        'verification_token',
+        'created_at',
+        'updated_at',
+        'is_deleted'
+      )
       .where('email', '=', user.email);
 
     if (data.length === 0) {
@@ -91,10 +150,21 @@ export async function loginUser(
       last_name: data[0].last_name,
       age_category: data[0].age_category,
       is_admin: data[0].is_admin,
+      is_email_verified: data[0].is_email_verified,
+      verification_token: data[0].verification_token,
       created_at: data[0].created_at,
       updated_at: data[0].updated_at,
       is_deleted: data[0].is_deleted,
     };
+
+    if (!data[0].is_email_verified) {
+      console.log(data[0]);
+
+      return {
+        responseCode: 403,
+        message: 'Email not verified',
+      };
+    }
 
     return {
       responseCode: 200,

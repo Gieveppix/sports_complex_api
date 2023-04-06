@@ -9,6 +9,8 @@ export async function up(knex: Knex): Promise<void> {
     table.string('last_name').notNullable();
     table.specificType('age_category', 'age_level').notNullable();
     table.boolean('is_admin').defaultTo('false');
+    table.boolean('is_email_verified').defaultTo('false');
+    table.string('verification_token').nullable();
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.boolean('is_deleted').defaultTo('false');

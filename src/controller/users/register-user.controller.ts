@@ -11,7 +11,13 @@ export async function registerUserController(
 
   const user: Omit<
     User,
-    'id' | 'is_admin' | 'created_at' | 'updated_at' | 'is_deleted'
+    | 'id'
+    | 'is_admin'
+    | 'created_at'
+    | 'updated_at'
+    | 'is_deleted'
+    | 'is_email_verified'
+    | 'verification_token'
   > = {
     email: request.body.email,
     password: request.body.password,

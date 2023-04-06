@@ -10,6 +10,7 @@ import { registerAppointmentController } from '$/src/controller/users/registerAp
 import { updateUserController } from '$/src/controller/users/update-user.controller.js';
 import { unregisterClassController } from '$/src/controller/users/unregisterClass.controller.js';
 import { unregisterAppointmentController } from '$/src/controller/users/unregisterAppointment.controller.js';
+import { verifyEmailUserController } from '../controller/users/verifyEmail-user.controller.js';
 
 export const userRoute = express.Router({ mergeParams: true });
 
@@ -17,14 +18,12 @@ userRoute.get('/users', authenticate, getAllUsersController);
 
 userRoute.get('/users/:id', authenticate, getUserByIdController);
 
+userRoute.get('/verify-email/:token', verifyEmailUserController);
+
 userRoute.post(
   '/auth/register',
   [
-    check('email', 'Your email is not valid')
-      .not()
-      .isEmpty()
-      .isEmail()
-      .normalizeEmail(),
+    check('email', 'Your email is not valid').not().isEmpty().isEmail(),
     check('password', 'Your password must be at least 4 characters')
       .not()
       .isEmpty()
@@ -39,11 +38,7 @@ userRoute.post(
 userRoute.post(
   '/auth/login',
   [
-    check('email', 'Your email is not valid')
-      .not()
-      .isEmpty()
-      .isEmail()
-      .normalizeEmail(),
+    check('email', 'Your email is not valid').not().isEmpty().isEmail(),
     check('password', 'Your password must be at least 4 characters')
       .not()
       .isEmpty()
