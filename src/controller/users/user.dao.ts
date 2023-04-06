@@ -115,21 +115,7 @@ export async function loginUser(
   user: Pick<User, 'email' | 'password'>
 ): Promise<Response> {
   try {
-    const data = await db('user')
-      .select(
-        'id',
-        'email',
-        'first_name',
-        'last_name',
-        'age_category',
-        'is_admin',
-        'is_email_verified',
-        'verification_token',
-        'created_at',
-        'updated_at',
-        'is_deleted'
-      )
-      .where('email', '=', user.email);
+    const data = await db('user').select('*').where('email', '=', user.email);
 
     if (data.length === 0) {
       throw new Error('Wrong email or password');
@@ -174,6 +160,8 @@ export async function loginUser(
       },
     };
   } catch (error) {
+    console.log(error);
+
     return {
       responseCode: 400,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
