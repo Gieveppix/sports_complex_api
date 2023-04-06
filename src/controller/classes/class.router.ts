@@ -1,11 +1,15 @@
 import express from 'express';
 import { check } from 'express-validator';
-import { createClassController } from '$/src/controller/classes/createClass.controller.js';
-import { updateClassController } from './updateClass.controller.js';
 import { getAllClassesController } from './getAll.controller.js';
 import { getClassByIdController } from './GetById.controller.js';
+import { createClassController } from '$/src/controller/classes/createClass.controller.js';
+import { updateClassController } from './updateClass.controller.js';
 
 export const classRoute = express.Router({ mergeParams: true });
+
+classRoute.get('/classes', getAllClassesController);
+
+classRoute.get('/classes/:id', getClassByIdController);
 
 classRoute.post(
   '/classes',
@@ -18,10 +22,6 @@ classRoute.post(
   ],
   createClassController
 );
-
-classRoute.get('/classes', getAllClassesController);
-
-classRoute.get('/classes/:id', getClassByIdController);
 
 classRoute.patch(
   '/classes/:id',

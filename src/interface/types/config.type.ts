@@ -10,21 +10,18 @@ export type Environment =
 export interface Config {
   environment: Environment;
   logLevel: Level;
+  jwt_secret: string;
   authentication: {
     enabled: boolean;
     jwksUrl: string;
   };
   database: Knex.PgConnectionConfig;
-  http: {
-    servicesUrl: string;
-    clientId: string;
-    clientSecret: string;
-  };
 }
 
 export interface ProcessVariables {
   ENV?: Environment;
   LOG_LEVEL?: Level;
+  JWT_SECRET?: string;
   JWKS_URL?: string;
   DATABASE_URL?: string;
   DATABASE_PORT?: string;

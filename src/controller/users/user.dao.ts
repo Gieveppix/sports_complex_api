@@ -5,10 +5,11 @@ import { ClassId } from '$/src/controller/classes/class.type.js';
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import * as bcrypt from 'bcrypt';
 import { AppointmentId } from '../appointments/appointment.type.js';
+import { generateToken } from '$/src/middleware/generate-token.js';
 
 type Response = {
   responseCode: number;
-  message: string;
+  message: string | object;
 };
 let response: Response = {
   responseCode: 500,
@@ -66,45 +67,50 @@ export async function registerUser(
 export async function loginUser(
   user: Pick<User, 'email' | 'password'>
 ): Promise<Response> {
-  return await db('user')
-    .select('email', 'password')
-    .where('email', '=', user.email)
-    .then(async (data) => {
-      const isValid = await bcrypt.compare(user.password, data[0].password);
+  try {
+    const data = await db('user')
+      .select('id', 'email', 'password', 'is_admin')
+      .where('email', '=', user.email);
 
-      if (isValid) {
-        return db('user')
-          .select('email', 'first_name', 'last_name', 'age_category')
-          .where('email', '=', user.email)
-          .then((user) => {
-            response = {
-              responseCode: 200,
-              message: user[0],
-            };
-            return response;
-          })
-          .catch((error) => {
-            response = {
-              responseCode: 400,
-              message: 'Unable to login',
-            };
-            return response;
-          });
-      } else {
-        response = {
-          responseCode: 400,
-          message: 'Wrong email or password',
-        };
-        return response;
-      }
-    })
-    .catch((error) => {
-      response = {
-        responseCode: 400,
-        message: 'Wrong email or password',
-      };
-      return response;
-    });
+    if (data.length === 0) {
+      throw new Error('Wrong email or password');
+    }
+
+    const isValid = await bcrypt.compare(user.password, data[0].password);
+
+    if (!isValid) {
+      throw new Error('Wrong email or password');
+    }
+
+    const token = generateToken(data[0]);
+
+    const responseUser: Omit<User, 'password'> = {
+      id: data[0].id as UserId,
+      email: data[0].email,
+      first_name: data[0].first_name,
+      last_name: data[0].last_name,
+      age_category: data[0].age_category,
+      is_admin: data[0].is_admin,
+      created_at: data[0].created_at,
+      updated_at: data[0].updated_at,
+      is_deleted: data[0].is_deleted,
+    };
+
+    return {
+      responseCode: 200,
+      message: {
+        user: responseUser,
+        token,
+      },
+    };
+  } catch (error) {
+    return {
+      responseCode: 400,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore TODO: fix this
+      message: error.message,
+    };
+  }
 }
 
 export async function getAllUsers(): Promise<{

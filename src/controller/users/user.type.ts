@@ -25,3 +25,9 @@ export const userFields: (keyof User)[] = [
   'updated_at',
   'is_deleted',
 ];
+
+export interface RequestUser {
+  id: number;
+  email: string;
+  is_admin: boolean;
+}

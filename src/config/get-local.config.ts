@@ -4,6 +4,7 @@ export function getLocalConfig(processVariables: ProcessVariables): Config {
   return {
     environment: 'local',
     logLevel: processVariables.LOG_LEVEL ?? 'debug',
+    jwt_secret: processVariables.JWT_SECRET ?? 'tugi',
     authentication: {
       enabled: false,
       jwksUrl: '',
@@ -15,11 +16,6 @@ export function getLocalConfig(processVariables: ProcessVariables): Config {
       port: 5432,
       password: 'pass',
       ssl: false,
-    },
-    http: {
-      servicesUrl: 'http://localhost:3001',
-      clientId: 'todos',
-      clientSecret: 'secret',
     },
   };
 }

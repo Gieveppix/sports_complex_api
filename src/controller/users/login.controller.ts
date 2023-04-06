@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { loginUser } from '$/src/controller/users/user.dao.js';
-import { ValidationError, validationResult } from 'express-validator';
+import { validationResult } from 'express-validator';
 import { User } from '$/src/controller/users/user.type.js';
 
 export async function loginUserController(
@@ -9,6 +9,11 @@ export async function loginUserController(
 ): Promise<void> {
   const errors = validationResult(request);
 
+  if (!errors.isEmpty()) {
+    response.status(422).send(errors.errors[0].msg);
+    return;
+  }
+
   const user: Pick<User, 'email' | 'password'> = {
     email: request.body.email,
     password: request.body.password,
@@ -16,9 +21,5 @@ export async function loginUserController(
 
   const res = await loginUser(user);
 
-  if (!errors.isEmpty()) {
-    response.status(422).send(errors.errors[0].msg as ValidationError);
-  } else {
-    response.status(res.responseCode).send(res.message);
-  }
+  response.status(res.responseCode).send(res.message);
 }

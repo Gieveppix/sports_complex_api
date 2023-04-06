@@ -1,12 +1,16 @@
 import express from 'express';
 import { check } from 'express-validator';
-import { createAppointmentController } from '$/src/controller/appointments/createAppointment.controller.js';
-import { updateAppointmentController } from '$/src/controller/appointments/updateAppointment.controller.js';
 import { getAllAppointmentsController } from './getAllAppointments.controller.js';
 import { getAppointmentByIdController } from './getAppointmentsById.controller.js';
+import { createAppointmentController } from '$/src/controller/appointments/createAppointment.controller.js';
+import { updateAppointmentController } from '$/src/controller/appointments/updateAppointment.controller.js';
 import { deleteAppointmentController } from './deleteAppointment.controller.js';
 
 export const appointmentRoute = express.Router({ mergeParams: true });
+
+appointmentRoute.get('/appointments', getAllAppointmentsController);
+
+appointmentRoute.get('/appointments/:id', getAppointmentByIdController);
 
 appointmentRoute.post(
   '/appointments',
@@ -21,10 +25,6 @@ appointmentRoute.post(
   ],
   createAppointmentController
 );
-
-appointmentRoute.get('/appointments', getAllAppointmentsController);
-
-appointmentRoute.get('/appointments/:id', getAppointmentByIdController);
 
 appointmentRoute.patch(
   '/appointments/:id',
