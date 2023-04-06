@@ -5,7 +5,14 @@ export async function getAllAppointmentsController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await getAllAppointments();
+  const { name, age } = request.query;
+
+  const filter = {
+    name: typeof name === 'string' ? name.split(',') : undefined,
+    age: typeof age === 'string' ? age : undefined,
+  };
+
+  const res = await getAllAppointments(filter);
 
   response
     .status(res.response.responseCode)

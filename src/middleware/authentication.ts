@@ -14,7 +14,7 @@ declare module 'express' {
   }
 }
 
-export const authentication = (
+export const authenticate = (
   req: Request,
   res: Response,
   next: NextFunction

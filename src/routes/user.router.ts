@@ -1,5 +1,6 @@
 import express from 'express';
 import { check } from 'express-validator';
+import { authenticate } from '$/src/middleware/authentication.js';
 import { getAllUsersController } from '$/src/controller/users/getAll-user.controller.js';
 import { getUserByIdController } from '$/src/controller/users/getById-user.controller.js';
 import { registerUserController } from '$/src/controller/users/register-user.controller.js';
@@ -12,9 +13,9 @@ import { unregisterAppointmentController } from '$/src/controller/users/unregist
 
 export const userRoute = express.Router({ mergeParams: true });
 
-userRoute.get('/users', getAllUsersController);
+userRoute.get('/users', authenticate, getAllUsersController);
 
-userRoute.get('/users/:id', getUserByIdController);
+userRoute.get('/users/:id', authenticate, getUserByIdController);
 
 userRoute.post(
   '/auth/register',
@@ -53,6 +54,7 @@ userRoute.post(
 
 userRoute.post(
   '/users/classes',
+  authenticate,
   [check('user_id', 'User id is required').not().isEmpty()],
   [check('class_id', 'Class id is required').not().isEmpty()],
   registerClassController
@@ -60,6 +62,7 @@ userRoute.post(
 
 userRoute.post(
   '/users/appointments',
+  authenticate,
   [check('user_id', 'User id is required').not().isEmpty()],
   [check('appointment_id', 'Class id is required').not().isEmpty()],
   registerAppointmentController
@@ -67,6 +70,7 @@ userRoute.post(
 
 userRoute.patch(
   '/users/:id',
+  authenticate,
   [
     check('email', 'Your email is not valid')
       .optional()
@@ -85,6 +89,7 @@ userRoute.patch(
 
 userRoute.delete(
   '/users/classes',
+  authenticate,
   [check('user_id', 'User id is required').not().isEmpty()],
   [check('class_id', 'Class id is required').not().isEmpty()],
   unregisterClassController
@@ -92,6 +97,7 @@ userRoute.delete(
 
 userRoute.delete(
   '/users/appointments',
+  authenticate,
   [check('user_id', 'User id is required').not().isEmpty()],
   [check('appointment_id', 'Class id is required').not().isEmpty()],
   unregisterAppointmentController

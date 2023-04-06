@@ -10,7 +10,7 @@ export function generateToken(user: User): string {
   };
 
   const options = {
-    expiresIn: '30000', // 30 seconds
+    expiresIn: '7d',
   };
 
   return jwt.sign(payload, config.jwt_secret, options);

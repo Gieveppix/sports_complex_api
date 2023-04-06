@@ -1,19 +1,29 @@
 import express from 'express';
 import { check } from 'express-validator';
-import { getAllAppointmentsController } from '../controller/appointments/getAll-appointments.controller.js';
-import { getAppointmentByIdController } from '../controller/appointments/getById-appointments.controller.js';
-import { createAppointmentController } from '../controller/appointments/create-appointment.controller.js';
-import { updateAppointmentController } from '../controller/appointments/update-appointment.controller.js';
-import { deleteAppointmentController } from '../controller/appointments/delete-appointment.controller.js';
+import { authenticate } from '$/src/middleware/authentication.js';
+import { getAllAppointmentsController } from '$/src/controller/appointments/getAll-appointment.controller.js';
+import { getAppointmentByIdController } from '$/src/controller/appointments/getById-appointment.controller.js';
+import { createAppointmentController } from '$/src/controller/appointments/create-appointment.controller.js';
+import { updateAppointmentController } from '$/src/controller/appointments/update-appointment.controller.js';
+import { deleteAppointmentController } from '$/src/controller/appointments/delete-appointment.controller.js';
 
 export const appointmentRoute = express.Router({ mergeParams: true });
 
-appointmentRoute.get('/appointments', getAllAppointmentsController);
+appointmentRoute.get(
+  '/appointments',
+  authenticate,
+  getAllAppointmentsController
+);
 
-appointmentRoute.get('/appointments/:id', getAppointmentByIdController);
+appointmentRoute.get(
+  '/appointments/:id',
+  authenticate,
+  getAppointmentByIdController
+);
 
 appointmentRoute.post(
   '/appointments',
+  authenticate,
   [
     check('class_id', 'Id of parent must be defined')
       .isNumeric()
@@ -28,6 +38,7 @@ appointmentRoute.post(
 
 appointmentRoute.patch(
   '/appointments/:id',
+  authenticate,
   [
     check('class_id', 'Id of parent must be defined')
       .isNumeric()
@@ -40,4 +51,8 @@ appointmentRoute.patch(
   updateAppointmentController
 );
 
-appointmentRoute.delete('/appointments/:id', deleteAppointmentController);
+appointmentRoute.delete(
+  '/appointments/:id',
+  authenticate,
+  deleteAppointmentController
+);

@@ -62,20 +62,34 @@ export async function createAppointment(
   }
 }
 
-export async function getAllAppointments(): Promise<any> {
-  return await db
-    .table('class_appointment')
-    .select('*')
-    .then((appointments) => {
-      response = {
-        responseCode: 200,
-        message: 'Appointments returned successfully',
-      };
-      return {
-        data: appointments,
-        response,
-      };
-    });
+export async function getAllAppointments(filter?: {
+  name?: string[];
+  age?: string;
+}): Promise<any> {
+  let query = db.table('class_appointment').select('*');
+
+  if (filter) {
+    if (filter.name) {
+      query = query
+        .join('class', 'class.id', 'class_appointment.class_id')
+        .whereIn('class.name', filter.name);
+    }
+
+    if (filter.age) {
+      query = query.where({ age_category: filter.age });
+    }
+  }
+
+  return await query.then((appointments) => {
+    response = {
+      responseCode: 200,
+      message: 'Appointments returned successfully',
+    };
+    return {
+      data: appointments,
+      response,
+    };
+  });
 }
 
 export async function getAppointmentById(id: string): Promise<any> {

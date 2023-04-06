@@ -56,20 +56,39 @@ export async function getClasses(): Promise<any> {
 }
 
 export async function getClassById(id: string): Promise<any> {
-  return await db
-    .table('class')
+  const classData = await db.table('class').select('*').where({ id }).first();
+
+  if (!classData) {
+    response = {
+      responseCode: 404,
+      message: `Class with id:${id} not found`,
+    };
+    return response;
+  }
+
+  const appointments = await db
+    .table('class_appointment')
     .select('*')
-    .where({ id })
-    .then((data) => {
-      response = {
-        responseCode: 200,
-        message: `Class with id:${id}`,
-      };
-      return {
-        data,
-        response,
-      };
-    });
+    .where({ class_id: id });
+
+  const schedule = appointments.map((appointment) => ({
+    starting_at: appointment.starting_at,
+    age_category: appointment.age_category,
+    duration: appointment.duration,
+  }));
+
+  response = {
+    responseCode: 200,
+    message: `Class with id:${id}`,
+  };
+
+  return {
+    data: {
+      ...classData,
+      schedule,
+    },
+    response,
+  };
 }
 
 export async function updateClass(id: string, classData: Class): Promise<any> {
