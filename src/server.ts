@@ -2,9 +2,9 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { logger, httpLogger } from '$/src/helpers/logger.js';
 import { healthController } from '$/src/controller/health.controller.js';
-import { userRoute } from '$/src/controller/users/user.router.js';
-import { classRoute } from '$/src/controller/classes/class.router.js';
-import { appointmentRoute } from '$/src/controller/appointments/appointment.router.js';
+import { userRoute } from '$/src/routes/user.router.js';
+import { classRoute } from '$/src/routes/class.router.js';
+import { appointmentRoute } from '$/src/routes/appointment.router.js';
 
 dotenv.config();
 

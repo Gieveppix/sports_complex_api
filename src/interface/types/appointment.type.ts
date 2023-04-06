@@ -1,4 +1,4 @@
-import { ClassId } from '../classes/class.type.js';
+import { ClassId } from '$/src/interface/types/class.type.js';
 
 export type AppointmentId = number;
 

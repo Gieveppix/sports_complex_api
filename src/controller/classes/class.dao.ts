@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */ // TODO: fix any
 import { db } from '$/src/database/db.js';
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
-import { Class } from '$/src/controller/classes/class.type.js';
+import { Class } from '$/src/interface/types/class.type.js';
 
 type Response = {
   responseCode: number;

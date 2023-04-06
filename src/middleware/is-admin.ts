@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { User } from '$/src/controller/users/user.type.js';
+import { User } from '$/src/interface/types/user.type.js';
 
 export function isAdmin(req: Request, res: Response, next: NextFunction) {
   const user = req.user as User;

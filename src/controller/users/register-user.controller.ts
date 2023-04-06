@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { registerUser } from '$/src/controller/users/user.dao.js';
 import { ValidationError, validationResult } from 'express-validator';
-import { User } from '$/src/controller/users/user.type.js';
+import { User } from '$/src/interface/types/user.type.js';
 
 export async function registerUserController(
   request: Request,

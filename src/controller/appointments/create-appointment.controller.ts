@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { validationResult, ValidationError } from 'express-validator';
-import { createAppointment } from './appointment.dao.js';
+import { createAppointment } from '$/src/controller/appointments/appointment.dao.js';
 
 export async function createAppointmentController(
   request: Request,

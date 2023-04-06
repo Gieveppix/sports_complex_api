@@ -1,14 +1,14 @@
 import express from 'express';
 import { check } from 'express-validator';
-import { getAllUsersController } from '$/src/controller/users/getAll.controller.js';
-import { getUserByIdController } from '$/src/controller/users/getById.controller.js';
-import { registerUserController } from '$/src/controller/users/register.controller.js';
-import { loginUserController } from '$/src/controller/users/login.controller.js';
-import { registerClassController } from './registerClass.controller.js';
-import { registerAppointmentController } from './registerAppointment.controller.js';
-import { updateUserController } from '$/src/controller/users/updateUser.controller.js';
-import { unregisterClassController } from './unregisterClass.controller.js';
-import { unregisterAppointmentController } from './unregisterAppointment.controller.js';
+import { getAllUsersController } from '$/src/controller/users/getAll-user.controller.js';
+import { getUserByIdController } from '$/src/controller/users/getById-user.controller.js';
+import { registerUserController } from '$/src/controller/users/register-user.controller.js';
+import { loginUserController } from '$/src/controller/users/login-user.controller.js';
+import { registerClassController } from '$/src/controller/users/registerClass.controller.js';
+import { registerAppointmentController } from '$/src/controller/users/registerAppointment.controller.js';
+import { updateUserController } from '$/src/controller/users/update-user.controller.js';
+import { unregisterClassController } from '$/src/controller/users/unregisterClass.controller.js';
+import { unregisterAppointmentController } from '$/src/controller/users/unregisterAppointment.controller.js';
 
 export const userRoute = express.Router({ mergeParams: true });
 

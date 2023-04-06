@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */ // TODO: fix any
 import { db } from '$/src/database/db.js';
-import { UserId, User } from '$/src/controller/users/user.type.js';
-import { ClassId } from '$/src/controller/classes/class.type.js';
+import { UserId, User } from '$/src/interface/types/user.type.js';
+import { ClassId } from '$/src/interface/types/class.type.js';
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import * as bcrypt from 'bcrypt';
-import { AppointmentId } from '../appointments/appointment.type.js';
+import { AppointmentId } from '$/src/interface/types/appointment.type.js';
 import { generateToken } from '$/src/middleware/generate-token.js';
 
 type Response = {

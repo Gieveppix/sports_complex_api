@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllAppointments } from './appointment.dao.js';
+import { getAllAppointments } from '$/src/controller/appointments/appointment.dao.js';
 
 export async function getAllAppointmentsController(
   request: Request,

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { RequestUser } from '$/src/controller/users/user.type.js';
-import { config } from '../config/config.js';
+import { RequestUser } from '$/src/interface/types/user.type.js';
+import { config } from '$/src/config/config.js';
 
 interface DecodedUser extends RequestUser {
   iat: number;

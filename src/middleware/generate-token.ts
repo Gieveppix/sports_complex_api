@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { User } from '$/src/controller/users/user.type.js';
-import { config } from '../config/config.js';
+import { User } from '$/src/interface/types/user.type.js';
+import { config } from '$/src/config/config.js';
 
 export function generateToken(user: User): string {
   const payload = {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */ // TODO: fix any
 import { db } from '$/src/database/db.js';
-import { Appointment } from '$/src/controller/appointments/appointment.type.js';
+import { Appointment } from '$/src/interface/types/appointment.type.js';
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 
 type Response = {
@@ -151,6 +151,7 @@ export async function updateAppointment(
 }
 
 // TODO: You have to implement check for the is_deleted flag
+// TODO: Delete users that have a appointment registered here
 export async function deleteAppointment(id: string): Promise<any> {
   const deletedRows = await db
     .table('class_appointment')

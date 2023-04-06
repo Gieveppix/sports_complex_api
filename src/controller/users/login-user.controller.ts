@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { loginUser } from '$/src/controller/users/user.dao.js';
 import { validationResult } from 'express-validator';
-import { User } from '$/src/controller/users/user.type.js';
-
+import { User } from '$/src/interface/types/user.type.js';
 export async function loginUserController(
   request: Request,
   response: Response

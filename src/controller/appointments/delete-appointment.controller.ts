@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { deleteAppointment } from './appointment.dao.js';
+import { deleteAppointment } from '$/src/controller/appointments/appointment.dao.js';
 
 export async function deleteAppointmentController(
   request: Request,

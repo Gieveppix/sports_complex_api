@@ -1,10 +1,10 @@
 import express from 'express';
 import { check } from 'express-validator';
-import { getAllAppointmentsController } from './getAllAppointments.controller.js';
-import { getAppointmentByIdController } from './getAppointmentsById.controller.js';
-import { createAppointmentController } from '$/src/controller/appointments/createAppointment.controller.js';
-import { updateAppointmentController } from '$/src/controller/appointments/updateAppointment.controller.js';
-import { deleteAppointmentController } from './deleteAppointment.controller.js';
+import { getAllAppointmentsController } from '../controller/appointments/getAll-appointments.controller.js';
+import { getAppointmentByIdController } from '../controller/appointments/getById-appointments.controller.js';
+import { createAppointmentController } from '../controller/appointments/create-appointment.controller.js';
+import { updateAppointmentController } from '../controller/appointments/update-appointment.controller.js';
+import { deleteAppointmentController } from '../controller/appointments/delete-appointment.controller.js';
 
 export const appointmentRoute = express.Router({ mergeParams: true });
 
