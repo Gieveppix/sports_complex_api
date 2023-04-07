@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
-import { unregisterClass } from '$/src/controller/users/user.dao.js';
+import { unenrollUserFromClassService } from '$/src/service/user.service.js';
 
 export async function unregisterClassController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await unregisterClass(request.body);
+  const { user_id, class_id } = request.body;
+
+  const res = await unenrollUserFromClassService(user_id, class_id);
   response.status(res.responseCode).send({ data: res });
 }

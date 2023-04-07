@@ -1,13 +1,11 @@
 import { Request, Response } from 'express';
-import { getAllUsers } from '$/src/controller/users/user.dao.js';
+import { getUsersService } from '$/src/service/user.service.js';
 
 export async function getAllUsersController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await getAllUsers();
+  const res = await getUsersService();
 
-  response
-    .status(res.response.responseCode)
-    .send({ data: res.user, response: res.response.message });
+  response.status(res.responseCode).send(res.message);
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { registerAppointment } from '$/src/controller/users/user.dao.js';
 import { ValidationError, validationResult } from 'express-validator';
+import { enrollUserToAppointmentService } from '$/src/service/user.service.js';
 
 export async function registerAppointmentController(
   request: Request,
@@ -8,7 +8,9 @@ export async function registerAppointmentController(
 ): Promise<void> {
   const errors = validationResult(request);
 
-  const res = await registerAppointment(request.body);
+  const { user_id, appointment_id } = request.body;
+
+  const res = await enrollUserToAppointmentService(user_id, appointment_id);
 
   if (!errors.isEmpty()) {
     response.status(422).send(errors.errors[0].msg as ValidationError);

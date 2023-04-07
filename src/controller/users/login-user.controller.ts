@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { loginUser } from '$/src/controller/users/user.dao.js';
 import { validationResult } from 'express-validator';
 import { User } from '$/src/interface/types/user.type.js';
+import { loginUserService } from '$/src/service/user.service.js';
+
 export async function loginUserController(
   request: Request,
   response: Response
@@ -18,7 +19,7 @@ export async function loginUserController(
     password: request.body.password,
   };
 
-  const res = await loginUser(user);
+  const res = await loginUserService(user.email, user.password);
 
   response.status(res.responseCode).send(res.message);
 }

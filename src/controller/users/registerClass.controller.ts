@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { registerClass } from '$/src/controller/users/user.dao.js';
 import { ValidationError, validationResult } from 'express-validator';
+import { enrollUserToClassService } from '$/src/service/user.service.js';
 
 export async function registerClassController(
   request: Request,
@@ -8,10 +8,13 @@ export async function registerClassController(
 ): Promise<void> {
   const errors = validationResult(request);
 
-  const res = await registerClass(request.body);
+  const { user_id, class_id } = request.body;
+  console.log(user_id, class_id);
+
   if (!errors.isEmpty()) {
     response.status(422).send(errors.errors[0].msg as ValidationError);
   } else {
+    const res = await enrollUserToClassService(user_id, class_id);
     response.status(res.responseCode).send({ data: res });
   }
 }

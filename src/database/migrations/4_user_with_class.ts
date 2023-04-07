@@ -40,22 +40,44 @@ export async function up(knex: Knex): Promise<void> {
     $$ LANGUAGE plpgsql;
   `);
 
-  // Add the trigger to the 'user_with_class' table
   await knex.raw(`
     CREATE TRIGGER check_class_limit_trigger
     BEFORE INSERT ON user_with_class
     FOR EACH ROW
     EXECUTE FUNCTION check_class_limit();
   `);
+
+  // Trigger to delete row in class_appointment_with_user, when matchin user_id and class_id
+  await knex.raw(`
+  CREATE OR REPLACE FUNCTION delete_class_appointments()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    DELETE FROM class_appointment_with_user
+    WHERE user_id = OLD.user_id AND class_appointment_id = OLD.class_id;
+
+    RETURN OLD;
+  END;
+  $$ LANGUAGE plpgsql;
+`);
+
+  await knex.raw(`
+  CREATE TRIGGER delete_class_appointments_trigger
+  AFTER DELETE ON user_with_class
+  FOR EACH ROW
+  EXECUTE FUNCTION delete_class_appointments();
+`);
 }
 
 export async function down(knex: Knex): Promise<void> {
-  // Drop the trigger and function
   await knex.raw(`
-    DROP TRIGGER IF EXISTS check_class_limit_trigger ON user_with_class;
-    DROP FUNCTION IF EXISTS check_class_limit();
-  `);
+  DROP TRIGGER IF EXISTS delete_class_appointments_trigger ON user_with_class;
+  DROP FUNCTION IF EXISTS delete_class_appointments();
+`);
 
-  // Drop the table
+  await knex.raw(`
+  DROP TRIGGER IF EXISTS check_class_limit_trigger ON user_with_class;
+  DROP FUNCTION IF EXISTS check_class_limit();
+`);
+
   await knex.schema.dropTable('user_with_class');
 }

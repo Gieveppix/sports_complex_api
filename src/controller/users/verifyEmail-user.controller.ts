@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { verifyEmail } from './user.dao.js';
+import { verifyEmailService } from '$/src/service/user.service.js';
 
 export async function verifyEmailUserController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await verifyEmail(request.params.token);
+  const res = await verifyEmailService(request.params.token);
   response.status(res.responseCode).send(res.message);
 }
