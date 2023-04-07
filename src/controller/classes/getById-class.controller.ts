@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getClassById } from '$/src/controller/classes/class.dao.js';
+import { getClassById } from '$/src/service/class.service.js';
 
 export async function getClassByIdController(
   request: Request,
@@ -8,6 +8,6 @@ export async function getClassByIdController(
   const res = await getClassById(request.params.id);
 
   response
-    .status(res.response.responseCode)
-    .send({ data: res.data, message: res.response.message });
+    .status(res.responseCode)
+    .send({ data: res.data, message: res.message });
 }

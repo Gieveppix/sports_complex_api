@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { validationResult, ValidationError } from 'express-validator';
-import { updateClass } from '$/src/controller/classes/class.dao.js';
+import { updateClass } from '$/src/service/class.service.js';
 
 export async function updateClassController(
   request: Request,

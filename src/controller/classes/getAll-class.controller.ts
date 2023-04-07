@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getClasses } from '$/src/controller/classes/class.dao.js';
+import { getClasses } from '$/src/service/class.service.js';
 
 export async function getAllClassesController(
   request: Request,
@@ -8,6 +8,6 @@ export async function getAllClassesController(
   const res = await getClasses();
 
   response
-    .status(res.response.responseCode)
-    .send({ data: res.data, response: res.response.message });
+    .status(res.responseCode)
+    .send({ data: res.data, response: res.message });
 }
