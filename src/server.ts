@@ -18,6 +18,8 @@ app.use('/api', userRoute);
 app.use('/api', classRoute);
 app.use('/api', appointmentRoute);
 
+console.log(config);
+
 app.listen(PORT, () => {
   logger.info(`App is up on port ${PORT}`);
 });

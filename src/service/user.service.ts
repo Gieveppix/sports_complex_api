@@ -42,27 +42,33 @@ export async function registerUserService(
     'email' | 'password' | 'first_name' | 'last_name' | 'age_category'
   >
 ) {
-  const existingUser = await findUserByEmail(user.email);
-  if (existingUser.length > 0) {
+  try {
+    const existingUser = await findUserByEmail(user.email);
+    if (existingUser.length > 0) {
+      response.responseCode = 400;
+      response.message = 'Email already exists';
+      return response;
+    }
+
+    const verificationToken = uuidv4();
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const newUser = {
+      ...user,
+      password: hashedPassword,
+      verification_token: verificationToken,
+    };
+
+    await createUser(newUser);
+    await sendVerificationEmail(newUser.email, verificationToken);
+
+    response.responseCode = 201;
+    response.message = 'User created successfully. Verification email sent.';
+    return response;
+  } catch {
     response.responseCode = 400;
-    response.message = 'Email already exists';
+    response.message = 'Unable to register user';
     return response;
   }
-
-  const verificationToken = uuidv4();
-  const hashedPassword = await bcrypt.hash(user.password, 10);
-  const newUser = {
-    ...user,
-    password: hashedPassword,
-    verification_token: verificationToken,
-  };
-
-  await createUser(newUser);
-  await sendVerificationEmail(newUser.email, verificationToken);
-
-  response.responseCode = 201;
-  response.message = 'User created successfully. Verification email sent.';
-  return response;
 }
 
 export async function loginUserService(email: string, password: string) {

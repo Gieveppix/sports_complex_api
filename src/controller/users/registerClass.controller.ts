@@ -10,9 +10,8 @@ export async function registerClassController(
   const errors = validationResultObject.array();
 
   const { user_id, class_id } = request.body;
-  console.log(user_id, class_id);
 
-  if (!errors.length) {
+  if (errors[0]) {
     response.status(422).send(errors[0].msg as ValidationError);
   } else {
     const res = await enrollUserToClassService(user_id, class_id);

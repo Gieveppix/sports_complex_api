@@ -5,7 +5,7 @@ export async function sendVerificationEmail(
   email: string,
   verificationToken: string
 ): Promise<void> {
-  if (config.sendgrid.api_key && config.sendgrid.email_username) {
+  if (config.sendgrid.api_key) {
     sgMail.setApiKey(config.sendgrid.api_key);
 
     const msg = {
