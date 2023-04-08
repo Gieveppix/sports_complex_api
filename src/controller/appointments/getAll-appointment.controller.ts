@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllAppointments } from '$/src/controller/appointments/appointment.dao.js';
+import { getAllAppointmentsService } from '$/src/service/appointment.service.js';
 
 export async function getAllAppointmentsController(
   request: Request,
@@ -12,7 +12,7 @@ export async function getAllAppointmentsController(
     age: typeof age === 'string' ? age : undefined,
   };
 
-  const res = await getAllAppointments(filter);
+  const res = await getAllAppointmentsService(filter);
 
   response
     .status(res.response.responseCode)

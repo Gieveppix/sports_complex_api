@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { getAppointmentById } from '$/src/controller/appointments/appointment.dao.js';
+import { getAppointmentByIdService } from '$/src/service/appointment.service.js';
 
 export async function getAppointmentByIdController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await getAppointmentById(request.params.id);
+  const res = await getAppointmentByIdService(Number(request.params.id));
 
   response
     .status(res.response.responseCode)

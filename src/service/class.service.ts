@@ -8,11 +8,11 @@ type Response = {
   data?: object; // TODO: dont forget to change
 };
 
-async function createClass(
+async function createClassService(
   classes: Omit<Class, 'id' | 'created_at' | 'updated_at'>
 ): Promise<Response> {
   try {
-    await classDao.createClassData(classes);
+    await classDao.createClass(classes);
     return {
       responseCode: 200,
       message: `Class ${classes.name} created`,
@@ -34,7 +34,7 @@ async function createClass(
   }
 }
 
-async function getClasses(): Promise<Response> {
+async function getClassesService(): Promise<Response> {
   const classes = await classDao.getAllClasses();
   return {
     responseCode: 200,
@@ -43,7 +43,7 @@ async function getClasses(): Promise<Response> {
   };
 }
 
-async function getClassById(id: string): Promise<Response> {
+async function getClassByIdService(id: string): Promise<Response> {
   const classData = await classDao.getClassByIdData(id);
 
   if (!classData) {
@@ -70,7 +70,10 @@ async function getClassById(id: string): Promise<Response> {
   };
 }
 
-async function updateClass(id: string, classData: Class): Promise<Response> {
+async function updateClassService(
+  id: string,
+  classData: Class
+): Promise<Response> {
   try {
     classData.updated_at = getCurrentTimestamp();
     const updatedRows = await classDao.updateClassData(id, classData);
@@ -94,4 +97,9 @@ async function updateClass(id: string, classData: Class): Promise<Response> {
   }
 }
 
-export { createClass, getClasses, getClassById, updateClass };
+export {
+  createClassService,
+  getClassesService,
+  getClassByIdService,
+  updateClassService,
+};

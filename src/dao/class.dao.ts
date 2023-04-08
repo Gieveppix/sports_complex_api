@@ -1,7 +1,7 @@
 import { db } from '$/src/database/db.js';
 import { Class } from '$/src/interface/types/class.type.js';
 
-export async function createClassData(
+export async function createClass(
   classData: Omit<Class, 'id' | 'created_at' | 'updated_at'>
 ) {
   return await db.table('class').insert(classData);

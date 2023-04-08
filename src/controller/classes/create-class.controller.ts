@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import { validationResult, ValidationError } from 'express-validator';
-import { createClass } from '$/src/service/class.service.js';
+import { createClassService } from '$/src/service/class.service.js';
 
 export async function createClassController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await createClass(request.body);
+  const res = await createClassService(request.body);
 
   const errors = validationResult(request);
 

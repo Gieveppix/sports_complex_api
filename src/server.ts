@@ -1,19 +1,19 @@
-import dotenv from 'dotenv';
 import express from 'express';
+import { config } from '$/src/config/config.js';
 import { logger, httpLogger } from '$/src/helpers/logger.js';
 import { healthController } from '$/src/controller/health.controller.js';
 import { userRoute } from '$/src/routes/user.router.js';
 import { classRoute } from '$/src/routes/class.router.js';
 import { appointmentRoute } from '$/src/routes/appointment.router.js';
 
-dotenv.config();
-
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(httpLogger);
 
-const PORT = process.env.PORT ?? 3001;
+console.log(config.database);
+
+const PORT = config.port ?? 3001;
 
 app.use('/health', healthController);
 app.use('/api', userRoute);

@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import { validationResult, ValidationError } from 'express-validator';
-import { createAppointment } from '$/src/controller/appointments/appointment.dao.js';
+import { createAppointmentService } from '$/src/service/appointment.service.js';
 
 export async function createAppointmentController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await createAppointment(request.body);
+  const res = await createAppointmentService(request.body);
 
   const errors = validationResult(request);
 

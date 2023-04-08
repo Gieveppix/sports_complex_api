@@ -25,7 +25,7 @@ import { generateToken } from '$/src/middleware/generate-token.js';
 import { User, UserId } from '$/src/interface/types/user.type.js';
 import { ClassId } from '$/src/interface/types/class.type.js';
 import { AppointmentId } from '$/src/interface/types/appointment.type.js';
-import { getClassByIdData } from '../dao/class.dao.js';
+import { getClassByIdData } from '$/src/dao/class.dao.js';
 
 type Response = {
   responseCode: number;
