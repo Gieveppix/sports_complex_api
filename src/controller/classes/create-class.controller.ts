@@ -8,11 +8,11 @@ export async function createClassController(
 ): Promise<void> {
   const res = await createClassService(request.body);
 
-  const errors = validationResult(request);
+  const validationResultObject = validationResult(request);
+  const errors = validationResultObject.array();
 
-  if (!errors.isEmpty()) {
-    // response.status(422).send(errors.errors[0].msg as ValidationError);
-    response.status(400).send('ldlslad');
+  if (!errors.length) {
+    response.status(422).send(errors[0].msg as ValidationError);
   } else {
     response.status(res.responseCode).send(res.message);
   }

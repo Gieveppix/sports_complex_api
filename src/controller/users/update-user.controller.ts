@@ -6,12 +6,13 @@ export async function updateUserController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const errors = validationResult(request);
+  const validationResultObject = validationResult(request);
+  const errors = validationResultObject.array();
+
   const res = await updateUserService(Number(request.params.id), request.body);
 
-  if (!errors.isEmpty()) {
-    // response.status(422).send(errors.errors[0].msg as ValidationError);
-    response.status(400).send('ldlslad');
+  if (!errors.length) {
+    response.status(422).send(errors[0].msg as ValidationError);
   } else {
     response.status(res.responseCode).json(res.message);
   }

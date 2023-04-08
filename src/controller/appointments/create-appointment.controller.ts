@@ -8,11 +8,11 @@ export async function createAppointmentController(
 ): Promise<void> {
   const res = await createAppointmentService(request.body);
 
-  const errors = validationResult(request);
+  const validationResultObject = validationResult(request);
+  const errors = validationResultObject.array();
 
-  if (!errors.isEmpty()) {
-    // response.status(422).send(errors.errors[0].msg as ValidationError);
-    response.status(400).send('ldlslad');
+  if (!errors.length) {
+    response.status(422).send(errors[0].msg as ValidationError);
   } else if (!res || res.response === undefined) {
     response.status(res.responseCode).json(res.message);
   } else {

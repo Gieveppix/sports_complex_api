@@ -1,12 +1,9 @@
 import { Knex } from 'knex';
-// import { config } from '$/src/config/config.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { config } from '$/src/config/config.js';
 
 export default {
   client: 'pg',
-  connection: process.env.DATABASE_URL,
+  connection: config.database.connectionString,
   migrations: {
     directory: './migrations',
   },
