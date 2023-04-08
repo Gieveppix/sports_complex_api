@@ -10,6 +10,7 @@ export function getLocalConfig(processVariables: ProcessVariables): Config {
     logLevel: processVariables.LOG_LEVEL ?? 'info',
     jwt_secret: process.env.JWT_SECRET ?? 'tugi',
     database: {
+      connectionString: process.env.PG_URL,
       user: process.env.PG_USER,
       host: process.env.PG_HOST,
       database: process.env.PG_NAME,

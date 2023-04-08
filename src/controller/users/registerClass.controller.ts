@@ -12,7 +12,8 @@ export async function registerClassController(
   console.log(user_id, class_id);
 
   if (!errors.isEmpty()) {
-    response.status(422).send(errors.errors[0].msg as ValidationError);
+    // response.status(422).send(errors.errors[0].msg as ValidationError);
+    response.status(400).send('ldlslad');
   } else {
     const res = await enrollUserToClassService(user_id, class_id);
     response.status(res.responseCode).send({ data: res });

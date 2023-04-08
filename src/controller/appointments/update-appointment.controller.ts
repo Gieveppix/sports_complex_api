@@ -14,7 +14,8 @@ export async function updateAppointmentController(
   const errors = validationResult(request);
 
   if (!errors.isEmpty()) {
-    response.status(422).send(errors.errors[0].msg as ValidationError);
+    // response.status(422).send(errors.errors[0].msg as ValidationError);
+    response.status(400).send('ldlslad');
   } else if (res.response === undefined) {
     response.status(res.responseCode).json(res.message);
   } else {

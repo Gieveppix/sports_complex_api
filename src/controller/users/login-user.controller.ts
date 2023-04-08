@@ -10,7 +10,8 @@ export async function loginUserController(
   const errors = validationResult(request);
 
   if (!errors.isEmpty()) {
-    response.status(422).send(errors.errors[0].msg);
+    // response.status(422).send(errors.errors[0].msg);
+    response.status(400).send('ldlslad');
     return;
   }
 

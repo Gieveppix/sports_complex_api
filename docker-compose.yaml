@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://root:pass@db:5432/sports_complex
+
+  db:
+    image: 'postgres:15-alpine'
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=sports_complex
+      - PG_USER=root
+      - PG_HOST=localhost
+      - PG_NAME=sports_complex
+      - PG_PORT=5432
+      - PG_PASSWORD=pass
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:

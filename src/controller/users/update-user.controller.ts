@@ -10,7 +10,8 @@ export async function updateUserController(
   const res = await updateUserService(Number(request.params.id), request.body);
 
   if (!errors.isEmpty()) {
-    response.status(422).send(errors.errors[0].msg as ValidationError);
+    // response.status(422).send(errors.errors[0].msg as ValidationError);
+    response.status(400).send('ldlslad');
   } else {
     response.status(res.responseCode).json(res.message);
   }

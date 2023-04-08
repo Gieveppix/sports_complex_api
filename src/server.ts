@@ -11,8 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(httpLogger);
 
-console.log(config.database);
-
 const PORT = config.port ?? 3001;
 
 app.use('/health', healthController);
@@ -20,6 +18,8 @@ app.use('/api', userRoute);
 app.use('/api', classRoute);
 app.use('/api', appointmentRoute);
 
+console.log(config);
+
 app.listen(PORT, () => {
-  logger.info({ PORT: `${PORT}` }, 'App is up');
+  logger.info(`App is up on port ${PORT}`);
 });
