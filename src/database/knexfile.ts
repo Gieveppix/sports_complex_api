@@ -1,9 +1,8 @@
 import { Knex } from 'knex';
-import { config } from '$/src/config/config.js';
 
 export default {
   client: 'pg',
-  connection: config.database.connectionString,
+  connection: 'postgres://root:pass@127.0.0.1:5432/sports_complex',
   migrations: {
     directory: './migrations',
   },

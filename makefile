@@ -22,7 +22,10 @@ migratedown:
 migratelatest:
 	npx knex migrate:latest
 
+getdockerip:	
+	docker inspect $(IP) | grep -i IPAddress
+
 server:
 	npm run server
 
-.PHONY: postgres createdb dropdb migrate migrateup migratedown migratelatest server
+.PHONY: postgres createdb dropdb migrate migrateup migratedown migratelatest getdockerip server

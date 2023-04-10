@@ -13,7 +13,7 @@ export async function registerAppointmentController(
 
   const res = await enrollUserToAppointmentService(user_id, appointment_id);
 
-  if (!errors.length) {
+  if (errors[0]) {
     response.status(422).send(errors[0].msg as ValidationError);
   } else {
     response.status(res.responseCode).send({ data: res });

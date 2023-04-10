@@ -10,7 +10,7 @@ export async function loginUserController(
   const validationResultObject = validationResult(request);
   const errors = validationResultObject.array();
 
-  if (!errors.length) {
+  if (errors[0]) {
     response.status(422).send(errors[0].msg as ValidationError);
     return;
   }

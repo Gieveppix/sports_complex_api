@@ -14,7 +14,7 @@ export async function updateAppointmentController(
   const validationResultObject = validationResult(request);
   const errors = validationResultObject.array();
 
-  if (!errors.length) {
+  if (errors[0]) {
     response.status(422).send(errors[0].msg as ValidationError);
   } else if (res.response === undefined) {
     response.status(res.responseCode).json(res.message);
