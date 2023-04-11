@@ -1,5 +1,6 @@
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import { Class } from '$/src/interface/types/class.type.js';
+import { Review } from '../interface/types/review.type.js';
 import * as classDao from '$/src/dao/class.dao.js';
 
 type Response = {
@@ -8,7 +9,7 @@ type Response = {
   data?: object; // TODO: dont forget to change
 };
 
-async function createClassService(
+export async function createClassService(
   classes: Omit<Class, 'id' | 'created_at' | 'updated_at'>
 ): Promise<Response> {
   try {
@@ -34,7 +35,7 @@ async function createClassService(
   }
 }
 
-async function getClassesService(): Promise<Response> {
+export async function getClassesService(): Promise<Response> {
   const classes = await classDao.getAllClasses();
   return {
     responseCode: 200,
@@ -43,7 +44,7 @@ async function getClassesService(): Promise<Response> {
   };
 }
 
-async function getClassByIdService(id: string): Promise<Response> {
+export async function getClassByIdService(id: string): Promise<Response> {
   const classData = await classDao.getClassByIdData(id);
 
   if (!classData) {
@@ -70,7 +71,7 @@ async function getClassByIdService(id: string): Promise<Response> {
   };
 }
 
-async function updateClassService(
+export async function updateClassService(
   id: string,
   classData: Class
 ): Promise<Response> {
@@ -97,9 +98,23 @@ async function updateClassService(
   }
 }
 
-export {
-  createClassService,
-  getClassesService,
-  getClassByIdService,
-  updateClassService,
-};
+export async function createReviewService(
+  review: Omit<Review, 'id' | 'created_at' | 'updated_at'>
+): Promise<Response> {
+  try {
+    await classDao.createReview(review);
+    return {
+      responseCode: 200,
+      message: `Review created`,
+    };
+  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    console.log('ERROROR', error);
+
+    return {
+      responseCode: 500,
+      message: 'Server error',
+    };
+  }
+}

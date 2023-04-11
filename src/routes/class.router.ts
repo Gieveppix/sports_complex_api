@@ -6,6 +6,7 @@ import { createClassController } from '$/src/controller/classes/create-class.con
 import { createClassValidator } from '$/src/validation/classes/create-class.validator.js';
 import { updateClassController } from '$/src/controller/classes/update-class.controller.js';
 import { updateClassValidator } from '$/src/validation/classes/update-class.validator.js';
+import { createReviewController } from '../controller/classes/create-review.controller.js';
 
 export const classRoute = express.Router({ mergeParams: true });
 
@@ -26,3 +27,5 @@ classRoute.patch(
   updateClassValidator,
   updateClassController
 );
+
+classRoute.post('/classes/reviews', authenticate, createReviewController);
