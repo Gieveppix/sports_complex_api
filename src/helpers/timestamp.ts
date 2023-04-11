@@ -5,7 +5,7 @@ function getCurrentTimestamp(): string {
   const pad = (number: number) => String(number).padStart(2, '0');
 
   const year = date.getFullYear();
-  const month = pad(date.getMonth() + 1); // Months are zero-based in JavaScript
+  const month = pad(date.getMonth() + 1);
   const day = pad(date.getDate());
   const hour = pad(date.getHours());
   const minute = pad(date.getMinutes());
