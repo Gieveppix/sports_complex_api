@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import * as appointmentDao from '$/src/dao/appointment.dao.js';
 

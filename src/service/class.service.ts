@@ -1,6 +1,6 @@
 import { getCurrentTimestamp } from '$/src/helpers/timestamp.js';
 import { Class } from '$/src/interface/types/class.type.js';
-import { Review } from '../interface/types/review.type.js';
+import { Review } from '$/src/interface/types/review.type.js';
 import * as classDao from '$/src/dao/class.dao.js';
 
 type Response = {
@@ -115,6 +115,49 @@ export async function createReviewService(
     return {
       responseCode: 500,
       message: 'Server error',
+    };
+  }
+}
+
+export async function updateReviewService(
+  id: string,
+  reviewData: Review
+): Promise<Response> {
+  try {
+    reviewData.updated_at = getCurrentTimestamp();
+    const updatedRows = await classDao.updateReviewData(id, reviewData);
+
+    if (updatedRows === 0) {
+      return {
+        responseCode: 404,
+        message: 'Review not found',
+      };
+    } else {
+      return {
+        responseCode: 200,
+        message: 'Review updated succesfully',
+      };
+    }
+  } catch (error) {
+    return {
+      responseCode: 500,
+      message: 'Server error',
+    };
+  }
+}
+
+export async function deleteReviewService(id: string): Promise<Response> {
+  const deletedRows = await classDao.deleteReview(id);
+
+  if (deletedRows === 0) {
+    return {
+      responseCode: 400,
+      message: 'Review not found',
+    };
+  } else {
+    return {
+      responseCode: 200,
+      message: 'Review deleted',
     };
   }
 }

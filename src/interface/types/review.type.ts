@@ -1,5 +1,5 @@
-import { UserId } from './user.type.js';
-import { ClassId } from './class.type.js';
+import { UserId } from '$/src/interface/types/user.type.js';
+import { ClassId } from '$/src/interface/types/class.type.js';
 
 export type ReviewId = number;
 

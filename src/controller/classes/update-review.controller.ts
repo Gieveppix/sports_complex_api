@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 // import { validationResult, ValidationError } from 'express-validator';
-import { createReviewService } from '$/src/service/class.service.js';
+import { updateReviewService } from '$/src/service/class.service.js';
 
-export async function createReviewController(
+export async function updateReviewController(
   request: Request,
   response: Response
 ): Promise<void> {
-  const res = await createReviewService(request.body);
+  const res = await updateReviewService(request.params.id, request.body);
 
   // const validationResultObject = validationResult(request);
   // const errors = validationResultObject.array();
